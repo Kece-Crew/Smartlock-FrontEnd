@@ -1,11 +1,14 @@
-const userData = (userData = [] , action) => {
+const userData = (records = [] , action) => {
     switch(action.type) {
-        case 'FETCH_ALL' : 
-            return action.payload; 
+        case 'FETCHALL' :
+            return action.payload;
+
         case 'UPDATE':
-            return userData;
+            return action.payload;
+
         case 'DELETE' : 
-            return userData;
+            return action.payload;
+
         default : 
             return [];
     }

@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react'
-import { useHistory} from 'react-router-dom'
-import { useDispatch } from 'react-redux'
+import { useHistory } from 'react-router-dom'
+import { useDispatch} from 'react-redux'
 import { makeStyles, AppBar, Toolbar, Typography, Button, IconButton } from '@material-ui/core'
 import MenuIcon from '@material-ui/icons/Menu'
 import Cookies from 'js-cookie'
-import decode from 'jwt-decode'
 import moment from 'moment'
+import decode from 'jwt-decode'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -23,30 +23,32 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Navbar = () => {
-  const [user, setUser] = useState(Cookies.get())
+  const [token, setToken] = useState(Cookies.get('jwtToken'))
+  const [user, setUser] = useState(Cookies.get('db_id'))
   const classes = useStyles()
   const dispatch = useDispatch()
   const history = useHistory()
 
   const logout = () => {
     dispatch({type: 'LOGOUT'})
-    history.push('/')
+    history.push('/auth')
     setUser(null)
   }
-
+  
   useEffect(() => {
-    const token = user?.jwtToken
-
-    if(token) {
-      const decodedToken = decode(token)
-
-      if(decodedToken.exp * 1000 < moment.now()){
+      if(token) {
+        const decodedToken = decode(token)
+  
+        if(decodedToken.exp * 1000 < moment.now()){
+          logout()
+        }
+      }else {
         logout()
       }
-    }
-
-    setUser(Cookies.get())
+      
+      setToken(Cookies.get('jwtToken'))
   }, [])
+
 
   return (
     <div className={classes.root}>
@@ -58,7 +60,7 @@ const Navbar = () => {
           <Typography variant="h6" className={classes.title}>
             Dashboard
           </Typography>
-          <Typography variant="overline" className={classes.dbName}>{user ? user.db_id : ''}</Typography>
+          <Typography variant="overline" className={classes.dbName}>{user ? user : ''}</Typography>
           <Button color="inherit" onClick={logout}>Logout</Button>
         </Toolbar>
       </AppBar>

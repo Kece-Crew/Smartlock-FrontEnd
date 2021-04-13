@@ -6,7 +6,6 @@ import { getData } from '../../actions/data'
 
 import Navbar from '../Navbar/Navbar'
 import Table from '../Table/Table'
-import Form from '../Form/Form'
 import Timer from '../Timer/Timer'
 
 const Home = () => {
