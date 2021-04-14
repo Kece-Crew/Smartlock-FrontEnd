@@ -12,9 +12,7 @@ API.interceptors.request.use((req) => {
 })
 
 export const getRecord = async () => API.get('/user/records', {withCredentials: true})
-export const updateRecord = async (recordId, userId, recordData, userData) => {
-    API.patch(`/user/record/${recordId}`, recordData).then(API.patch(`/user/UserData/${userId}`, userData)).then(getRecord)
-}
+export const updateRecord = async (recordId, recordData) => API.patch(`/user/record/${recordId}`, recordData, {withCredentials: true})
 
 export const deleteRecord = async (recordId) => API.delete(`/user/record/${recordId}`, {withCredentials: true}).then(getRecord)
 export const signIn = async (authData) => API.post('/auth/login', authData)

@@ -10,9 +10,9 @@ export const getData = () => async (dispatch) => {
     }
 }
 
-export const updateData = (recordId, recordData, userId, userData) => async(dispatch) => {
+export const updateData = (recordId, recordData) => async(dispatch) => {
     try{
-        const { data } = await api.updateRecord(recordId, recordData, userId, userData)
+        const { data } = await api.updateRecord(recordId, recordData)
 
         dispatch({type: 'UPDATE', payload: data})
 
@@ -30,3 +30,4 @@ export const deleteData = (recordId) => async(dispatch) => {
         console.log(error.message)
     }
 }
+
