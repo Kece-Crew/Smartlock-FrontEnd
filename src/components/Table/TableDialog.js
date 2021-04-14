@@ -61,7 +61,7 @@ const TableDialog = ({isOpen, handleClose, isEdit, currentId}) => {
                         {!isEdit && 'Are you sure want to delete this record ?'}
                     </DialogContentText>
                     {isEdit && (
-                    <form style={{paddingBottom: '20px'}} onSubmit={handleSubmit}>
+                    <form style={{paddingBottom: '20px'}}>
                         <Grid container spacing={2} direction="column">
                             <Grid item>
                                 <TextField disabled value={userData.uid} variant="outlined"  label="UID"/>
