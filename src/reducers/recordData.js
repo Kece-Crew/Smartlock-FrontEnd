@@ -1,15 +1,15 @@
-const userData = (records = [] , action) => {
+const recordData = (records = [] , action) => {
     switch(action.type) {
-        case 'FETCHUSER' :
+        case 'FETCHRECORD' :
             return action.payload
 
-        case 'UPDATEUSER':
+        case 'UPDATERECORD':
             return records.map((record) => record._id === action.payload._id ? action.payload : record)
 
-        case 'DELETEUSER' : 
+        case 'DELETERECORD' : 
             return action.payload
 
-        case 'ERROR' : 
+        case 'UPLOAD' :
             return action.payload
 
         default : 
@@ -17,4 +17,4 @@ const userData = (records = [] , action) => {
     }
 }
 
-export default userData
+export default recordData

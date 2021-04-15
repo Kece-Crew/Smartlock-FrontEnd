@@ -8,57 +8,89 @@ import moment from 'moment'
 
 import TableDialog from './TableDialog'
 
-const Table = ({currentId, setCurrentId}) => {
+const Table = ({currentId, setCurrentId, checked}) => {
     const [open, setOpen] = useState(false)
     const [isEdit, setIsEdit] = useState(true)
     const [isLoading, setIsLoading] = useState(true)
-    const record = useSelector((state) => state.userData)
+    const record = useSelector((state) => state.recordData)
+
+    let rows = [], columns = []
 
     useEffect(() => {
         if(!record.length){
-            setIsLoading(true)
-        }else{
-            setIsLoading(false)
+            return setIsLoading(true)
         }
-    })
+        setIsLoading(false)
+    },[record, checked])
 
-    // console.log(record)
+    if(!checked) {
+        // for showing all record even without userdata
+        // const rows = record.map(item => { 
+        rows = record.filter(item => item.userData != null).map(item => {
+            const container = {}
+            container['id'] = item._id
+            container['uid'] = item.uid
+            container['name'] = item.userData ? item.userData.name : ''
+            container['temperature'] = item.temperature
+            container['status'] = item.status
+            container['createdAt'] = moment(item.createdAt).format('M/D/YYYY LT')
+            container['action'] = ''
+            return container
+        })
 
-    // for showing all record even without userdata
-    // const rows = record.map(item => { 
-    const rows = record.filter(item => item.userData != null).map(item => {
-        const container = {}
-        container['id'] = item.id
-        container['uid'] = item.uid
-        container['name'] = item.userData ? item.userData.name : ''
-        container['temperature'] = item.temperature
-        container['status'] = item.status
-        container['createdAt'] = moment(item.createdAt).format('M/D/YYYY LT')
-        container['action'] = ''
-        return container
-    })
+        columns = [
+            { field: 'id', headerName: 'id', hide: true},
+            { field: 'uid', headerName: 'UID',  width: 120},
+            { field: 'name', headerName: 'Name', flex:1},
+            { field: 'temperature', headerName: 'Temp',  width: 100},
+            { field: 'status', headerName: 'Status',  width: 100 },
+            { field: 'createdAt', headerName: 'Time In', width: 200, type:'dateTime'},
+            { field: 'action', headerName: 'Action', width:150, sortable:false,
+            renderCell: (params) => (
+                <>
+                    <IconButton color="primary" 
+                        onClick={(e) => {
+                            handleEdit(params.getValue('id'))}} >
+                        <EditIcon />
+                    </IconButton >  
+                    <IconButton color="secondary" onClick={e => handleDelete(params.getValue('id'))} >
+                        <DeleteIcon />
+                    </IconButton>
+                </>
+            )}
+        ]
+    } else {
+        
+        rows = record.map(item => {
+            const container = {}
+            container['id'] = item.id
+            container['uid'] = item.uid
+            container['name'] = item.name
+            // container['createdAt'] = moment(item.createdAt).format('M/D/YYYY LT')
+            return container
+        })
 
-    const columns = [
-        { field: 'id', headerName: 'id', hide: true},
-        { field: 'uid', headerName: 'UID',  width: 120},
-        { field: 'name', headerName: 'Name', flex:1},
-        { field: 'temperature', headerName: 'Temp',  width: 100},
-        { field: 'status', headerName: 'Status',  width: 100 },
-        { field: 'createdAt', headerName: 'Time In', width: 200, type:'dateTime'},
-        { field: 'action', headerName: 'Action', width:150, 
-        renderCell: (params) => (
-            <>
-                <IconButton color="primary" 
-                    onClick={(e) => {
-                        handleEdit(params.getValue('id'))}} >
-                    <EditIcon />
-                </IconButton >  
-                <IconButton color="secondary" onClick={e => handleDelete(params.getValue('id'))} >
-                    <DeleteIcon />
-                </IconButton>
-            </>
-        )}
-    ];
+        columns = [
+            { field: 'id', headerName: 'id', hide: true},
+            { field: 'uid', headerName: 'UID',  flex:1},
+            { field: 'name', headerName: 'Name', flex:1},
+            // { field: 'createdAt', headerName: 'Time In', width: 200, type:'dateTime'},
+            { field: 'action', headerName: 'Action', width:150, sortable:false,
+            renderCell: (params) => (
+                <>
+                    <IconButton color="primary" 
+                        onClick={(e) => {
+                            handleEdit(params.getValue('id'))}} >
+                        <EditIcon />
+                    </IconButton >  
+                    <IconButton color="secondary" onClick={e => handleDelete(params.getValue('id'))} >
+                        <DeleteIcon />
+                    </IconButton>
+                </>
+            )}
+        ]
+    }
+    
 
     const loadingOverlay = () => {
         return (
@@ -92,6 +124,7 @@ const Table = ({currentId, setCurrentId}) => {
                 handleClose={handleClose}  
                 isEdit={isEdit}
                 currentId={currentId}
+                checked={checked}
             />
 
             <Paper elevation={3}>

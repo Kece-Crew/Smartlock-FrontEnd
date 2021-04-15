@@ -11,34 +11,48 @@ import {
     Grid
 } from '@material-ui/core'
 import { useSelector, useDispatch } from 'react-redux'
-import { updateData, deleteData} from '../../actions/data'
+import { updateData, deleteData, updateUser, deleteUser } from '../../actions/data'
 
 import TableSnackBar from './TableSnackBar'
 
-const TableDialog = ({isOpen, handleClose, isEdit, currentId}) => {
+const TableDialog = ({isOpen, handleClose, isEdit, currentId, checked}) => {
     const [open, setOpen] = useState(false)
     const [success, setSuccess] = useState(false)
-    const [userData, setUserData] = useState({ uid: '', userData:{ name: '' }, temperature: ''})
-    const record = useSelector((state) => currentId ? state.userData.find((rec) => rec._id === currentId) : null)
+    const [recordData, setRecordData] = useState({ uid: '', userData:{ name: '' }, temperature: ''})
+    const [userData, setUserData] = useState({ uid: '', name: ''})
+
+    const record = useSelector((state) => currentId ? state.recordData.find((rec) => rec._id === currentId) : null)
 
     const dispatch = useDispatch()
 
     useEffect(() => {
-        if(record) setUserData(record)
+        if(checked) setUserData(record)
+        if(record && !checked) setRecordData(record)
+        
         if(isOpen){
             setOpen(true)
         } else {
             setOpen(false)
         }
-    },[record, isOpen])
+    },[record, isOpen, checked])
 
     const handleSubmit = () => {
-        if(!isEdit){
-            console.log('delete')
-            dispatch(deleteData(currentId))
+        if(!checked){
+            if(!isEdit){
+                // console.log('delete')
+                dispatch(deleteData(currentId))
+            } else {
+                // console.log('update')
+                dispatch(updateData(currentId, recordData))
+            }
         } else {
-            console.log('update')
-            dispatch(updateData(currentId, userData))
+            if(!isEdit){
+                // console.log('delete')
+                dispatch(deleteUser(currentId))
+            } else {
+                // console.log('update')
+                dispatch(updateUser(currentId, userData))
+            }
         }
         setSuccess(true)
         handleClose()
@@ -63,15 +77,28 @@ const TableDialog = ({isOpen, handleClose, isEdit, currentId}) => {
                     {isEdit && (
                     <form style={{paddingBottom: '20px'}}>
                         <Grid container spacing={2} direction="column">
-                            <Grid item>
-                                <TextField disabled value={userData.uid} variant="outlined"  label="UID"/>
-                            </Grid>
-                            <Grid item>
-                                <TextField disabled value={!userData.userData ? '' : userData.userData.name} variant="outlined"  label="Name"/>
-                            </Grid>
-                            <Grid item>
-                                <TextField variant="outlined" value={userData.temperature} onChange={e => setUserData({...userData, temperature: e.target.value})} label="Temperature"/>
-                            </Grid>
+                            {!checked ? (
+                                <>
+                                    <Grid item>
+                                        <TextField disabled value={recordData.uid} variant="outlined"  label="UID"/>
+                                    </Grid>
+                                    <Grid item>
+                                        <TextField disabled value={!recordData.userData ? '' : recordData.userData.name} variant="outlined"  label="Name"/>
+                                    </Grid>
+                                    <Grid item>
+                                        <TextField variant="outlined" value={recordData.temperature} onChange={e => setRecordData({...recordData, temperature: e.target.value})} label="Temperature"/>
+                                    </Grid>
+                                </>
+                            ): (
+                                <>
+                                    <Grid item>
+                                        <TextField disabled value={!userData ? '' : userData.uid} variant="outlined"  label="UID"/>
+                                    </Grid>
+                                    <Grid item>
+                                        <TextField value={!userData ? '' : userData.name} onChange={e => setUserData({...userData, name: e.target.value})} variant="outlined"  label="Name"/>
+                                    </Grid>
+                                </>
+                            )}
                         </Grid>
                     </form>
                     )}

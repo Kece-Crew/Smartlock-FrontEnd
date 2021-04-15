@@ -8,7 +8,6 @@ import thunk from 'redux-thunk'
 import App from './App'
 import reducers from './reducers'
 
-//for storing state
 const store = createStore(reducers, compose(applyMiddleware(thunk)))
 
 ReactDOM.render(
