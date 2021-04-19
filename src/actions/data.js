@@ -6,7 +6,12 @@ export const getData = () => async (dispatch) => {
 
         dispatch({type: 'FETCHRECORD', payload: data})
     }catch (error){
-        console.log(error.message)
+        let err = error.response.data.messages
+        // console.log(err)
+        if(typeof(err) === 'object'){
+            err = err[0]
+        }
+        dispatch({type : 'ERRORRECORD', payload: err})
     }
 }
 
@@ -27,47 +32,6 @@ export const deleteData = (recordId) => async(dispatch) => {
 
         dispatch({type: 'DELETERECORD', payload: data})
     } catch (error){
-        console.log(error.message)
-    }
-}
-
-export const getUserdata = () => async(dispatch) => {
-    try {
-        const { data } = await api.getUserData()
-
-        dispatch({type: 'FETCHRECORD', payload: data})
-    } catch (error){
-        console.log(error.message)
-    }
-}
-
-export const updateUser = (userId, userData) => async(dispatch) => {
-    try{
-        const { data } = await api.updateUser(userId, userData)
-
-        dispatch({type: 'UPDATERECORD', payload: data})
-
-    } catch (error) {
-        console.log(error.message)
-    }
-}
-
-export const deleteUser = (userId) => async(dispatch) => {
-    try{
-        const { data } = await api.deleteRecord(userId)
-
-        dispatch({type: 'DELETERECORD', payload: data})
-    } catch (error){
-        console.log(error.message)
-    }
-}
-
-export const uploadUser = (userData) => async(dispatch) => {
-    try {
-        const { data } = await api.addUser(userData)
-
-        dispatch({type : 'UPLOADUSER', payload: data})
-    } catch (error) {
         console.log(error.message)
     }
 }

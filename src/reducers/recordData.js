@@ -9,11 +9,11 @@ const recordData = (records = [] , action) => {
         case 'DELETERECORD' : 
             return action.payload
 
-        case 'UPLOAD' :
-            return action.payload
+        case 'ERRORRECORD' :
+            return []
 
         default : 
-            return []
+            return records
     }
 }
 

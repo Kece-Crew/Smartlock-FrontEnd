@@ -6,7 +6,13 @@ export const signIn = (authData, history) => async (dispatch) => {
         dispatch({type: 'SIGNIN', payload: data})
         history.push('/')
     } catch(error) {
-        console.log(error.message)
+        let err = error.response.data.messages
+        // console.log(err)
+        if(typeof(err) === 'object'){
+            err = err[0]
+        }
+        dispatch({type : 'ERRORSIGNIN', payload: err})
+        
     }
 }
 
@@ -16,6 +22,11 @@ export const signUp = (authData, history) => async (dispatch) => {
         dispatch({type: 'SIGNUP', payload: data})
         history.push('/')
     } catch(error) {
-        console.log(error.message)
+        let err = error.response.data.messages
+        // console.log(err)
+        if(typeof(err) === 'object'){
+            err = err[0]
+        }
+        dispatch({type : 'ERRORSIGNUP', payload: err})
     }
 }

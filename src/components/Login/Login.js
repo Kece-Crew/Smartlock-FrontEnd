@@ -11,7 +11,7 @@ import Input from './Input'
 const Login = () => {
     const [authData, setAuthData] = useState({username: '', password: '', confirmPassword: '', db_id: ''})
     const [showPassword, setShowPassword] = useState(false)
-    const [isSignUp, setIsRegister] = useState(false)
+    const [isSignUp, setIsSignUp] = useState(false)
     const classes = useStyles()
     const dispatch = useDispatch()
     const history = useHistory()
@@ -33,7 +33,7 @@ const Login = () => {
     const handleShowPassword = () => setShowPassword((prev) => !prev)
 
     const switchMode = () => {
-        setIsRegister((prev) => !prev)
+        setIsSignUp((prev) => !prev)
         setShowPassword(false)
     }
     
@@ -48,11 +48,13 @@ const Login = () => {
                                 <Input name="username" label="Username" handleChange={handleChange} autoFocus/>
                                 {isSignUp && <Input name="db_id" label="DB ID" handleChange={handleChange}/>}
                                 <Input name="password" label="Password" handleChange={handleChange} type={showPassword ? "text" : "password"} handleShowPassword={handleShowPassword}/>
-                                {isSignUp && <Input name="confirmPassword" label="Confirm Password" handleChange={handleChange} type="password"/>}
+                                {/* {isSignUp && <Input name="confirmPassword" label="Confirm Password" handleChange={handleChange} type="password"/>} */}
                             </Grid>
+                            
                             <Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit}>
                                 {isSignUp ? 'Sign Up' : 'Sign In'}
                             </Button>
+                            
                             <Grid container justify="flex-end">
                                 <Grid item>
                                     <Button onClick={switchMode}>

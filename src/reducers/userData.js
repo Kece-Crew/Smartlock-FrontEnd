@@ -9,11 +9,14 @@ const userData = (records = [] , action) => {
         case 'DELETEUSER' : 
             return action.payload
 
-        case 'ERROR' : 
+        case 'UPLOADUSER' : 
             return action.payload
+        
+        case 'ERRORUSER' :
+            return []
 
         default : 
-            return []
+            return records
     }
 }
 

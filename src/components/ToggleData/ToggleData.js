@@ -6,18 +6,16 @@ import {
     IconButton, 
     Typography, 
     Switch,
-    LinearProgress,
     Input,
     Divider
 } from '@material-ui/core'
 
-import { uploadUser } from '../../actions/data'
+import { uploadUser } from '../../actions/user'
 
 import PublishIcon from '@material-ui/icons/Publish'
 
 const ToggleData = ({checked, setChecked}) => {
     const [selectFile, setSelectFile] = useState(null)
-    const [progress, setProgress] = useState(0)
 
     const dispatch = useDispatch()
 
