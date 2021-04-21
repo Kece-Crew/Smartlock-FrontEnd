@@ -33,7 +33,7 @@ export const updateUser = (userId, userData) => async(dispatch) => {
 
 export const deleteUser = (userId) => async(dispatch) => {
     try{
-        const { data } = await api.deleteRecord(userId)
+        const { data } = await api.deleteUser(userId)
 
         dispatch({type: 'DELETEUSER', payload: data})
     } catch (error){
