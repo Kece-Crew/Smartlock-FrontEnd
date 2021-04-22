@@ -1,13 +1,18 @@
 import React, { useEffect, useState  } from 'react'
-import { useSelector } from 'react-redux'
-import { Paper, CircularProgress, IconButton } from '@material-ui/core'
-import { DataGrid, GridToolbar, GridOverlay } from '@material-ui/data-grid'
+import { useSelector, useDispatch } from 'react-redux'
+import { Paper, IconButton } from '@material-ui/core'
+import { DataGrid } from '@material-ui/data-grid'
 import EditIcon from '@material-ui/icons/Edit'
 import DeleteIcon from '@material-ui/icons/Delete'
 
 import TableDialog from './TableDialog'
+import CustomToolbar from '../ToolBar/CustomToolbar'
+import LoadingOverlay from '../ToolBar/LoadingOverlay'
 
-const Table = ({currentId, setCurrentId}) => {
+import { deleteUser } from '../../actions/user'
+
+const Table = ({currentId, setCurrentId, selectedId, setSelectedId }) => {
+    const dispatch = useDispatch()
     const [open, setOpen] = useState(false)
     const [isEdit, setIsEdit] = useState(true)
     const [isLoading, setIsLoading] = useState(true)
@@ -36,7 +41,7 @@ const Table = ({currentId, setCurrentId}) => {
         { field: 'uid', headerName: 'UID',  flex:1},
         { field: 'name', headerName: 'Name', flex:1},
         // { field: 'createdAt', headerName: 'Time In', width: 200, type:'dateTime'},
-        { field: 'action', headerName: 'Action', width:150, sortable:false,
+        { field: 'action', headerName: 'Action', width:150, sortable:false, disableClickEventBubbling: true,
         renderCell: (params) => (
             <>
                 <IconButton color="primary" 
@@ -50,15 +55,6 @@ const Table = ({currentId, setCurrentId}) => {
             </>
         )}
     ]
-    
-    const loadingOverlay = () => {
-        return (
-        <GridOverlay>
-            <div style={{position : 'absolute'}}>
-                <CircularProgress/>       
-            </div>
-        </GridOverlay>    
-    )}
 
     const handleEdit = (id) => {
         setCurrentId(id)
@@ -76,6 +72,18 @@ const Table = ({currentId, setCurrentId}) => {
         setOpen(false)
     }
 
+    const handleCheck = (e) => {
+        const idList = e.selectionModel
+        setSelectedId(idList)
+    }
+
+    const handleDeleteSelected = () => {
+        selectedId.map(item => {
+            return dispatch(deleteUser(item))
+        })
+        setSelectedId([])
+    }
+
     return (
         <div>
             <TableDialog 
@@ -88,11 +96,21 @@ const Table = ({currentId, setCurrentId}) => {
             <Paper elevation={3}>
                 <div style={{ height: 500, width: '100%' }}>
                     <DataGrid rows={rows} columns={columns}
-                    components={{ 
-                        Toolbar: GridToolbar,
-                        LoadingOverlay: loadingOverlay
-                    }}
-                    loading={isLoading} />
+                        components={{ 
+                            Toolbar: CustomToolbar,
+                            LoadingOverlay: LoadingOverlay
+                        }}
+                        componentsProps={{
+                            toolbar: {handleDelete : handleDeleteSelected, selected : selectedId}
+                        }}
+                        sortModel={[{
+                            field : 'name',
+                            sort : 'asc'
+                        }]}
+                        checkboxSelection
+                        onSelectionModelChange={e => handleCheck(e)}
+                        loading={isLoading} 
+                    />
                 </div>
             </Paper>
         </div>

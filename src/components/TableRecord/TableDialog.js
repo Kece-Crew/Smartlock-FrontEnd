@@ -63,7 +63,6 @@ const TableDialog = ({isOpen, handleClose, isEdit, currentId}) => {
                         {!isEdit && 'Are you sure want to delete this record ?'}
                     </DialogContentText>
                     {isEdit && (
-                    <form style={{paddingBottom: '20px'}}>
                         <Grid container spacing={2} direction="column">   
                             <Grid item>
                                 <TextField disabled value={recordData.uid} variant="outlined"  label="UID"/>
@@ -72,10 +71,9 @@ const TableDialog = ({isOpen, handleClose, isEdit, currentId}) => {
                                 <TextField disabled value={!recordData.userData ? '' : recordData.userData.name} variant="outlined"  label="Name"/>
                             </Grid>
                             <Grid item>
-                                <TextField variant="outlined" value={recordData.temperature} onChange={e => setRecordData({...recordData, temperature: e.target.value})} label="Temperature"/>
+                                <TextField variant="outlined" value={recordData.temperature} onChange={e => setRecordData({...recordData, temperature: e.target.value})} type="number" label="Temperature"/>
                             </Grid>
                         </Grid>
-                    </form>
                     )}
                 </DialogContent>
                 <DialogActions>
