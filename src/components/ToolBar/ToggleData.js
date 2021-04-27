@@ -1,20 +1,22 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { 
-    Card, 
-    CardContent, 
+    Paper,
+    Box, 
     IconButton, 
     Typography, 
     Switch,
     Input,
     Divider
 } from '@material-ui/core'
+import PublishIcon from '@material-ui/icons/Publish'
 
 import { uploadUser } from '../../actions/user'
 
-import PublishIcon from '@material-ui/icons/Publish'
+import useStyles from './styles'
 
 const ToggleData = ({checked, setChecked}) => {
+    const classes = useStyles()
     const [selectFile, setSelectFile] = useState(null)
 
     const dispatch = useDispatch()
@@ -31,8 +33,8 @@ const ToggleData = ({checked, setChecked}) => {
     }
 
     return (
-        <Card elevation={3}>
-            <CardContent>
+        <Paper variant='outlined'>
+            <Box display='flex' className={classes.toggledata} justifyContent="flex-start" flexDirection="column">
                 <Typography variant='overline'>Toggle User Data</Typography>
                 <Switch
                     checked={checked}
@@ -64,8 +66,8 @@ const ToggleData = ({checked, setChecked}) => {
                     <LinearProgress variant="determinate" value={progress} />
                 </div> */}
                 
-            </CardContent>
-        </Card>
+            </Box>
+        </Paper>
     )
 }
 

@@ -9,9 +9,11 @@ import { getUserdata } from '../../actions/user'
 import Navbar from '../Navbar/Navbar'
 import TableRecord from '../TableRecord/TableRecord'
 import TableUser from '../TableUser/TableUser'
-import Timer from '../Timer/Timer'
-import ToggleData from '../ToggleData/ToggleData'
-import DialogWarning from '../DialogWarning/DialogWarning'
+import Timer from '../ToolBar/Timer'
+import ToggleData from '../ToolBar/ToggleData'
+import DialogWarning from '../ToolBar/DialogWarning'
+import UserLogged from '../ToolBar/UserLogged'
+import UserWarning from '../ToolBar/UserWarning'
 
 const Home = () => {
     const [isOpen, setIsOpen] = useState(false)
@@ -19,6 +21,8 @@ const Home = () => {
     const [currentId, setCurrentId] = useState(null)
     const [selectedId, setSelectedId] = useState([])
     const [checked, setChecked] = useState(false)
+    const [warning, setWarning] = useState(0)
+    const [logged, setLogged] = useState(0)
     const dispatch = useDispatch()
 
     useEffect(() => {
@@ -26,11 +30,13 @@ const Home = () => {
         socket.emit('albertque')
         socket.on('userLogged', () => {
             dispatch(getData())
+            setLogged((prev) => prev+1)
         })
         socket.on('warning', (data) => {
             dispatch(getData())
             setIsOpen(true)
             setMessage(data.message)
+            setWarning((prev) => prev+1)
         })
         dispatch(getUserdata())
         dispatch(getData())
@@ -42,7 +48,20 @@ const Home = () => {
             <Navbar/>
             <DialogWarning open={isOpen} setOpen={setIsOpen} message={message}/>
             <div style={{paddingTop : '20px'}}>
-                <Grid container justify='center' direction="row" alignItems="flex-start" spacing={2}>
+                <Grid container justify="flex-start" spacing={3}>
+                    <Grid item>
+                        <UserLogged logged={logged}/>
+                    </Grid>
+                    <Grid item>
+                        <UserWarning warning={warning}/>
+                    </Grid>
+                    <Grid item>
+                        <Timer/>
+                    </Grid>
+                </Grid>
+                
+                <div style={{paddingTop : '20px'}}>
+                <Grid container justify="center" alignItems="flex-start" spacing={2}>
                     <Grid item sm={12} xs={12} lg>
                         {checked ? 
                             (<TableUser 
@@ -58,18 +77,10 @@ const Home = () => {
                         }
                     </Grid>
                     <Grid item sm={12} xs={12} lg={3}>
-                        <Grid container direction="column" justify='center' alignItems="stretch" spacing={2}>
-                            <Hidden only={['sm', 'xs','md']}>
-                                <Grid item>
-                                    <Timer/>
-                                </Grid>
-                            </Hidden>
-                            <Grid item>
-                                <ToggleData checked={checked} setChecked={setChecked}/>
-                            </Grid>
-                        </Grid>
+                        <ToggleData checked={checked} setChecked={setChecked}/>
                     </Grid>
                 </Grid>
+                </div>
             </div>
         </>
     )

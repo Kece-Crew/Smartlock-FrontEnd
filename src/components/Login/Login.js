@@ -42,11 +42,12 @@ const Login = () => {
             <Grow in={true} timeout={1000}>
                 <Container component='main' maxWidth='xs'>
                     <Paper className={classes.paper} elevation={3}>
-                        <Typography variant="h4">{isSignUp ? 'SIGN UP' : 'SIGN IN'}</Typography>
+                        
+                        <Typography className={classes.title} variant="h4">{isSignUp ? 'sign up' : 'sign in'}</Typography>
                         <form autoComplete="off" className={classes.form} onSubmit={handleSubmit}>
                             <Grid container spacing={2}>
                                 <Input name="username" label="Username" handleChange={handleChange} autoFocus/>
-                                {isSignUp && <Input name="db_id" label="DB ID" handleChange={handleChange}/>}
+                                {isSignUp && <Input name="db_id" label="Database ID" handleChange={handleChange}/>}
                                 <Input name="password" label="Password" handleChange={handleChange} type={showPassword ? "text" : "password"} handleShowPassword={handleShowPassword}/>
                                 {/* {isSignUp && <Input name="confirmPassword" label="Confirm Password" handleChange={handleChange} type="password"/>} */}
                             </Grid>

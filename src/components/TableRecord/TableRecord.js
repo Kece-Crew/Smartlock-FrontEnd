@@ -1,9 +1,11 @@
 import React, { useEffect, useState  } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { Paper, IconButton } from '@material-ui/core'
+import { Paper, IconButton, Chip } from '@material-ui/core'
 import { DataGrid } from '@material-ui/data-grid'
 import EditIcon from '@material-ui/icons/Edit'
 import DeleteIcon from '@material-ui/icons/Delete'
+import CheckIcon from '@material-ui/icons/Check'
+import ErrorIcon from '@material-ui/icons/Error';
 import moment from 'moment'
 
 import TableDialog from './TableDialog'
@@ -47,9 +49,17 @@ const Table = ({currentId, setCurrentId, selectedId, setSelectedId }) => {
         { field: 'uid', headerName: 'UID',  width: 120},
         { field: 'name', headerName: 'Name', flex:1},
         { field: 'temperature', headerName: 'Temp',  width: 100},
-        { field: 'status', headerName: 'Status',  width: 100 },
+        { field: 'status', headerName: 'Status',  width: 100, 
+            renderCell: (params) => (
+                <Chip 
+                    color={params.value === 'Ok' ? 'primary' : 'secondary'} 
+                    label={params.value}
+                    icon={params.value === 'Ok' ? <CheckIcon/> : <ErrorIcon/>}
+                    size='small'
+                />
+        )},
         { field: 'createdAt', headerName: 'Time In', width: 200, type:'dateTime'},
-        { field: 'action', headerName: 'Action', width:150, sortable:false,
+        { field: 'action', headerName: 'Action', width:150, sortable:false, disableClickEventBubbling: true,
         renderCell: (params) => (
             <>
                 <IconButton color="primary" 
@@ -101,9 +111,10 @@ const Table = ({currentId, setCurrentId, selectedId, setSelectedId }) => {
                 currentId={currentId}
             />
 
-            <Paper elevation={3}>
-                <div style={{ height: 500, width: '100%' }}>
-                    <DataGrid rows={rows} columns={columns}
+            <Paper elevation={0}>
+                <div style={{ display: 'flex', height: '100%' }}>
+                    <div style={{ flexGrow: 1 }}>
+                    <DataGrid autoHeight pageSize={5} rows={rows} columns={columns}
                         components={{ 
                             Toolbar: CustomToolbar,
                             LoadingOverlay: LoadingOverlay
@@ -119,6 +130,7 @@ const Table = ({currentId, setCurrentId, selectedId, setSelectedId }) => {
                         checkboxSelection
                         onSelectionModelChange={e => handleCheck(e)}
                     />
+                    </div>
                 </div>
             </Paper>
         </div>

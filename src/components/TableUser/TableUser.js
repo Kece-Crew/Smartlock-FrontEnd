@@ -93,9 +93,10 @@ const Table = ({currentId, setCurrentId, selectedId, setSelectedId }) => {
                 currentId={currentId}
             />
 
-            <Paper elevation={3}>
-                <div style={{ height: 500, width: '100%' }}>
-                    <DataGrid rows={rows} columns={columns}
+            <Paper elevation={0}>
+                <div style={{ display: 'flex', height: '100%' }}>
+                    <div style={{ flexGrow: 1 }}>
+                    <DataGrid autoHeight pageSize={5} rows={rows} columns={columns}
                         components={{ 
                             Toolbar: CustomToolbar,
                             LoadingOverlay: LoadingOverlay
@@ -111,6 +112,7 @@ const Table = ({currentId, setCurrentId, selectedId, setSelectedId }) => {
                         onSelectionModelChange={e => handleCheck(e)}
                         loading={isLoading} 
                     />
+                    </div>
                 </div>
             </Paper>
         </div>
