@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Grid, Hidden } from '@material-ui/core'
+import { Grid } from '@material-ui/core'
 import { useDispatch } from 'react-redux'
 import { io } from 'socket.io-client'
 
@@ -48,7 +48,7 @@ const Home = () => {
             <Navbar/>
             <DialogWarning open={isOpen} setOpen={setIsOpen} message={message}/>
             <div style={{paddingTop : '20px'}}>
-                <Grid container justify="flex-start" spacing={3}>
+                <Grid container justify="center" alignItems="center" spacing={3}>
                     <Grid item>
                         <UserLogged logged={logged}/>
                     </Grid>
@@ -62,6 +62,9 @@ const Home = () => {
                 
                 <div style={{paddingTop : '20px'}}>
                 <Grid container justify="center" alignItems="flex-start" spacing={2}>
+                    <Grid item sm={12} xs={12} lg={3}>
+                        <ToggleData checked={checked} setChecked={setChecked}/>
+                    </Grid>
                     <Grid item sm={12} xs={12} lg>
                         {checked ? 
                             (<TableUser 
@@ -75,9 +78,6 @@ const Home = () => {
                                 selectedId={selectedId} 
                                 setSelectedId={setSelectedId}/>)
                         }
-                    </Grid>
-                    <Grid item sm={12} xs={12} lg={3}>
-                        <ToggleData checked={checked} setChecked={setChecked}/>
                     </Grid>
                 </Grid>
                 </div>
