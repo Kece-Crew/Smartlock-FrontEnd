@@ -26,7 +26,7 @@ const Home = () => {
     const dispatch = useDispatch()
 
     useEffect(() => {
-        const socket = io('http://localhost:7070/')
+        const socket = io('https://smartsani.herokuapp.com/')
         socket.emit('albertque')
         socket.on('userLogged', () => {
             dispatch(getData())
@@ -40,6 +40,7 @@ const Home = () => {
         })
         dispatch(getUserdata())
         dispatch(getData())
+        socket.disconnect()
         
     },[dispatch, currentId, checked])
 
