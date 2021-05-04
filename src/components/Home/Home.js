@@ -40,7 +40,6 @@ const Home = () => {
         })
         dispatch(getUserdata())
         dispatch(getData())
-        socket.disconnect()
         
     },[dispatch, currentId, checked])
 
