@@ -1,7 +1,7 @@
 import axios from 'axios'
 import Cookies from 'js-cookie'
 
-const API = axios.create({baseURL : 'http://localhost:7070/api'})
+const API = axios.create({baseURL : 'https://smartsani.herokuapp.com/api'})
 
 API.interceptors.request.use((req) => {
     if(Cookies.get().jwtToken){
