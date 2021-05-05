@@ -34,7 +34,6 @@ export const updateUser = (userId, userData) => async(dispatch) => {
         dispatch({type: 'UPDATEUSER', payload: data})
         dispatch(dataLoading(false))
         dispatch(dataSuccess(true))
-        dispatch(dataSuccess(false))
 
     } catch (error) {
         let err = error.response
@@ -56,7 +55,6 @@ export const deleteUser = (userId) => async(dispatch) => {
         dispatch({type: 'DELETEUSER', payload: data})
         dispatch(dataLoading(false))
         dispatch(dataSuccess(true))
-        dispatch(dataSuccess(false))
 
     } catch (error){
         let err = error.response.data.messages
