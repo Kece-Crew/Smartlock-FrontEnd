@@ -1,4 +1,4 @@
-import React, { useEffect, useState  } from 'react'
+import React, { useState  } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Paper, IconButton, Chip } from '@material-ui/core'
 import { DataGrid } from '@material-ui/data-grid'
@@ -18,21 +18,14 @@ const Table = ({currentId, setCurrentId, selectedId, setSelectedId }) => {
     const dispatch = useDispatch()
     const [open, setOpen] = useState(false)
     const [isEdit, setIsEdit] = useState(true)
-    const [isLoading, setIsLoading] = useState(true)
-    const record = useSelector((state) => state.records)
+
+    const data = useSelector((state) => state.records)
 
     let rows = [], columns = []
 
-    useEffect(() => {
-        if(!record.length){
-            return setIsLoading(true)
-        }
-        setIsLoading(false)
-    },[record])
-
     // for showing all record even without userdata
     // const rows = record.map(item => { 
-    rows = record.filter(item => item.userData != null).map(item => {
+    rows = data.records.filter(item => item.userData != null).map(item => {
         const container = {}
         container['id'] = item._id
         container['uid'] = item.uid
@@ -96,8 +89,8 @@ const Table = ({currentId, setCurrentId, selectedId, setSelectedId }) => {
     }
 
     const handleDeleteSelected = () => {
-        selectedId.map(item => {
-            return dispatch(deleteData(item))
+        selectedId.forEach(item => {
+            dispatch(deleteData(item))
         })
         setSelectedId([])
     }
@@ -126,7 +119,7 @@ const Table = ({currentId, setCurrentId, selectedId, setSelectedId }) => {
                             field : 'createdAt',
                             sort : 'desc'
                         }]}
-                        loading={isLoading} 
+                        loading={data.isLoading} 
                         checkboxSelection
                         onSelectionModelChange={e => handleCheck(e)}
                     />

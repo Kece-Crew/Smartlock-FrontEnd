@@ -17,10 +17,10 @@ import TableSnackBar from './TableSnackBar'
 
 const TableDialog = ({isOpen, handleClose, isEdit, currentId}) => {
     const [open, setOpen] = useState(false)
-    const [success, setSuccess] = useState(false)
     const [recordData, setRecordData] = useState({ uid: '', userData:{ name: '' }, temperature: ''})
-
-    const record = useSelector((state) => currentId ? state.records.find((rec) => rec._id === currentId) : null)
+    
+    const data = useSelector((state) => state.records)
+    const record = currentId ? data.records.find((rec) => rec._id === currentId) : null
 
     const dispatch = useDispatch()
 
@@ -36,19 +36,16 @@ const TableDialog = ({isOpen, handleClose, isEdit, currentId}) => {
 
     const handleSubmit = () => {
         if(!isEdit){
-            // console.log('delete')
             dispatch(deleteData(currentId))
         } else {
-            // console.log('update')
             dispatch(updateData(currentId, recordData))
         }
-        setSuccess(true)
         handleClose()
     }
 
     return (
         <div>
-            <TableSnackBar isEdit={isEdit} isSuccess={success} setIsSuccess={setSuccess}/>
+            <TableSnackBar isEdit={isEdit} isSuccess={data.isSuccess}/>
             <Dialog
             open={open}
             onClose={handleClose}

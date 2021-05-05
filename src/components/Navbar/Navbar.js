@@ -1,45 +1,42 @@
 import React, { useState, useEffect } from 'react'
 import { useHistory } from 'react-router-dom'
-import { useDispatch} from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { AppBar, Toolbar, Typography, Button, IconButton, Box } from '@material-ui/core'
 import MenuIcon from '@material-ui/icons/Menu'
 import ExitToAppIcon from '@material-ui/icons/ExitToApp' 
 import Cookies from 'js-cookie'
-import moment from 'moment'
 import decode from 'jwt-decode'
+
 import useStyles from './styles'
+import { logout } from '../../actions/auth'
 
 const Navbar = () => {
+  const errors = useSelector((state) => state.errors)
+
   const [token, setToken] = useState(Cookies.get('jwtToken'))
   const [user, setUser] = useState({username : token ? decode(token).user : '', db_id : Cookies.get('db_id')})
   const classes = useStyles()
   const dispatch = useDispatch()
   const history = useHistory()
 
-  const logout = () => {
-    dispatch({type: 'LOGOUT'})
+  const logoutUser = () => {
+    dispatch(logout())
     history.push('/auth')
     setUser(null)
   }
   
   useEffect(() => {
-      if(token) {
-        const decodedToken = decode(token)
-  
-        if(decodedToken.exp * 1000 < moment.now()){
-          logout()
-        }
-      }else {
-        logout()
-      }
+    if(errors.status === 403 || errors.status === 401){
+      logoutUser()
+    }
       
-      setToken(Cookies.get('jwtToken'))
-  }, [])
+    setToken(Cookies.get('jwtToken'))
+  }, [errors])
 
 
   return (
     <div className={classes.root}>
-      <AppBar position="static">
+      <AppBar position="fixed">
         <Toolbar>
           <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
             <MenuIcon />
@@ -52,9 +49,10 @@ const Navbar = () => {
             <Typography className={classes.dbName}>{user ? user.db_id : ''}</Typography>
           </Box>
           
-          <Button color="inherit" className={classes.logout} startIcon={<ExitToAppIcon />} onClick={logout}>Logout</Button>
+          <Button color="inherit" className={classes.logout} startIcon={<ExitToAppIcon />} onClick={logoutUser}>Logout</Button>
         </Toolbar>
       </AppBar>
+      <Toolbar/>
     </div>
   )
 }

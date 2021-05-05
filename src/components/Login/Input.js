@@ -10,6 +10,7 @@ const Input = ({ name, handleChange, autofocus, label, type, error, handleShowPa
                 name={name}
                 onChange={handleChange}
                 variant="outlined"
+                error={error}
                 required
                 fullWidth
                 label={label}

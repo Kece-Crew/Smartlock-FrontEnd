@@ -1,4 +1,4 @@
-import React, { useEffect, useState  } from 'react'
+import React, { useState  } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Paper, IconButton } from '@material-ui/core'
 import { DataGrid } from '@material-ui/data-grid'
@@ -15,19 +15,11 @@ const Table = ({currentId, setCurrentId, selectedId, setSelectedId }) => {
     const dispatch = useDispatch()
     const [open, setOpen] = useState(false)
     const [isEdit, setIsEdit] = useState(true)
-    const [isLoading, setIsLoading] = useState(true)
-    const userdata = useSelector((state) => state.users)
+    const data = useSelector((state) => state.users)
 
     let rows = [], columns = []
 
-    useEffect(() => {
-        if(!userdata.length){
-            return setIsLoading(true)
-        }
-        setIsLoading(false)
-    },[userdata])
-
-    rows = userdata.map(item => {
+    rows = data.users.map(item => {
         const container = {}
         container['id'] = item.id
         container['uid'] = item.uid
@@ -110,7 +102,7 @@ const Table = ({currentId, setCurrentId, selectedId, setSelectedId }) => {
                         }]}
                         checkboxSelection
                         onSelectionModelChange={e => handleCheck(e)}
-                        loading={isLoading} 
+                        loading={data.isLoading} 
                     />
                     </div>
                 </div>
