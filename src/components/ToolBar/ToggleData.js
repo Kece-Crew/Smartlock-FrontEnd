@@ -15,7 +15,7 @@ import { uploadUser } from '../../actions/user'
 
 import useStyles from './styles'
 
-const ToggleData = ({checked, setChecked}) => {
+const ToggleData = ({checked, setChecked, setSelectedId}) => {
     const classes = useStyles()
     const [selectFile, setSelectFile] = useState(null)
 
@@ -23,6 +23,7 @@ const ToggleData = ({checked, setChecked}) => {
 
     const handleChange = (event) => {
         setChecked(!checked)
+        setSelectedId([])
     }
 
     const handleSubmit = () => {

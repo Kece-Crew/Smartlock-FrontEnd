@@ -1,8 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import { Snackbar, IconButton } from '@material-ui/core'
-import CloseIcon from '@material-ui/icons/Close';
+import React, { useEffect, useState } from 'react'
+import { useDispatch } from 'react-redux'
 
-const TableSnackBar = ({isEdit, isSuccess, setIsSuccess}) => {
+import { Snackbar, IconButton } from '@material-ui/core'
+import CloseIcon from '@material-ui/icons/Close'
+
+import { dataSuccess } from '../../actions/data'
+
+const TableSnackBar = ({ isEdit, isSuccess }) => {
+    const dispatch = useDispatch()
     const [open, setOpen] = useState(false);
 
     useEffect(() => {
@@ -11,15 +16,15 @@ const TableSnackBar = ({isEdit, isSuccess, setIsSuccess}) => {
 
     const handleClick = () => {
         setOpen(true)
+        dispatch(dataSuccess(false))
     }
 
     const handleClose = (event, reason) => {
         if (reason === 'clickaway') {
             return;
         }
-
+        
         setOpen(false)
-        setIsSuccess(false)
     }
 
     return (
@@ -27,12 +32,12 @@ const TableSnackBar = ({isEdit, isSuccess, setIsSuccess}) => {
             <Snackbar
             anchorOrigin={{
                 vertical: 'bottom',
-                horizontal: 'center',
+                horizontal: 'left',
             }}
             open={open}
             autoHideDuration={3000}
             onClose={handleClose}
-            message={isEdit ? 'Data sucessfully updated' : 'Data sucessfully deleted'}
+            message={isEdit ? 'Data successfully updated' : 'Data successfully deleted'}
             action={
                 <React.Fragment>
                 <IconButton size="small" aria-label="close" color="inherit" onClick={handleClose}>

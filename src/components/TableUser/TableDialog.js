@@ -15,12 +15,12 @@ import { updateUser, deleteUser } from '../../actions/user'
 
 import TableSnackBar from './TableSnackBar'
 
-const TableDialog = ({isOpen, handleClose, isEdit, currentId, checked}) => {
+const TableDialog = ({ isOpen, handleClose, isEdit, currentId }) => {
     const [open, setOpen] = useState(false)
-    const [success, setSuccess] = useState(false)
     const [userData, setUserData] = useState({ uid: '', name: ''})
-
-    const userdata = useSelector((state) => currentId ? state.users.find((rec) => rec._id === currentId) : null)
+    
+    const data = useSelector((state) => state.users)
+    const userdata = currentId ? data.users.find((rec) => rec._id === currentId) : null
 
     const dispatch = useDispatch()
 
@@ -32,23 +32,20 @@ const TableDialog = ({isOpen, handleClose, isEdit, currentId, checked}) => {
         } else {
             setOpen(false)
         }
-    },[userdata, isOpen, checked])
+    },[userdata, isOpen])
 
     const handleSubmit = () => {
         if(!isEdit){
-            // console.log('delete')
             dispatch(deleteUser(currentId))
         } else {
-            // console.log('update')
             dispatch(updateUser(currentId, userData))
         }
-        setSuccess(true)
         handleClose()
     }
 
     return (
         <div>
-            <TableSnackBar isEdit={isEdit} isSuccess={success} setIsSuccess={setSuccess}/>
+            <TableSnackBar isEdit={isEdit} isSuccess={data.isSuccess}/>
             <Dialog
             open={open}
             onClose={handleClose}

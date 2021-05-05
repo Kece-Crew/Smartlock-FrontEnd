@@ -1,19 +1,31 @@
-const recordData = (records = [] , action) => {
+const initialState = {
+    records : [],
+    isLoading : false,
+    isSuccess : false
+}
+
+const recordData = (state = initialState , action) => {
     switch(action.type) {
         case 'FETCHRECORD' :
-            return action.payload
+            return {...state, records : action.payload}
 
+        case 'ACTION_LOADING':
+            return {...state, isLoading : action.payload}
+
+        case 'ACTION_SUCCESS' : 
+            return {...state, isSuccess : action.payload}
+        
         case 'UPDATERECORD':
-            return records.map((record) => record._id === action.payload._id ? action.payload : record)
+            return {...state, records : state.records.map((record) => record._id === action.payload._id ? action.payload : record)}
 
         case 'DELETERECORD' : 
-            return action.payload
-
+            return {...state, records : action.payload}
+        
         case 'ERRORRECORD' :
-            return []
+            return {...state, records : []}
 
         default : 
-            return records
+            return state
     }
 }
 
